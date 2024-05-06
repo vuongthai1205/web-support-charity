@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="com.mycompany_mangxahoituthien_war_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.mycompany.pojo.UserRole</class>
+    <class>com.mycompany.constants.pojo.ResultAction</class>
+    <class>com.mycompany.constants.pojo.Share</class>
+    <class>com.mycompany.constants.pojo.Comment</class>
+    <class>com.mycompany.constants.pojo.ReportUser</class>
+    <class>com.mycompany.constants.pojo.Post</class>
+    <class>com.mycompany.constants.pojo.Role</class>
+    <class>com.mycompany.constants.pojo.AuctionStatus</class>
+    <class>com.mycompany.constants.pojo.HashTag</class>
+    <class>com.mycompany.constants.pojo.PostTag</class>
+    <class>com.mycompany.constants.pojo.User</class>
+    <class>com.mycompany.constants.pojo.LikePost</class>
+    <class>com.mycompany.pojo.VaiTroThamGiaDa</class>
+    <class>com.mycompany.pojo.BaiViet</class>
+    <class>com.mycompany.pojo.TvBinhLuanBv</class>
+    <class>com.mycompany.pojo.ThanhVien</class>
+    <class>com.mycompany.pojo.DauGia</class>
+    <class>com.mycompany.pojo.DuAnTuThien</class>
+    <class>com.mycompany.pojo.HinhAnhBaiViet</class>
+    <class>com.mycompany.pojo.TrangThaiDauGia</class>
+    <class>com.mycompany.pojo.Quyen</class>
+    <class>com.mycompany.pojo.ThamGiaDuAn</class>
+    <class>com.mycompany.pojo.BaoCaoThanhVien</class>
+    <class>com.mycompany.pojo.TvThichBv</class>
+    <class>com.mycompany.pojo.The</class>
+    <class>com.mycompany.pojo.HinhAnhDuAn</class>
+    <class>com.mycompany.pojo.HinhAnhBinhLuanDa</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/charitydb?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="12345"/>
+    </properties>
+  </persistence-unit>
+</persistence>

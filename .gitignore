@@ -1,0 +1,52 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+replay_pid*
+/webhotrotuthien/target/
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/webhotrotuthien_client/node_modules
+/webhotrotuthien_client/.pnp
+/webhotrotuthien_client/.pnp.js
+
+# testing
+/webhotrotuthien_client/coverage
+
+# production
+/webhotrotuthien_client/build
+
+# misc
+/webhotrotuthien_client/.DS_Store
+/webhotrotuthien_client/.env.local
+/webhotrotuthien_client/.env.development.local
+/webhotrotuthien_client/.env.test.local
+/webhotrotuthien_client/.env.production.local
+
+/webhotrotuthien_client/npm-debug.log*
+/webhotrotuthien_client/yarn-debug.log*
+/webhotrotuthien_client/yarn-error.log*
+
+# Local Netlify folder
+/webhotrotuthien_client/.netlify

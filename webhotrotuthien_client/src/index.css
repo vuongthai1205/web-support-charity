@@ -1,0 +1,276 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.item-pagination{
+  color: inherit;
+  text-decoration: none;
+  padding: 4px 10px;
+  margin-right: 8px;
+  border: 1px solid;
+  border-radius: 8px;
+}
+
+.item-pagination.active{
+  background-color: aqua;
+}
+
+.action_post {
+  position: absolute;
+  top: 3%;
+  right: 3%;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+h4.item-sidebar a {
+  color: black;
+  text-decoration: none;
+  border: 1px solid;
+  display: block;
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+h4.item-sidebar a.active {
+  color: #0B6EFD;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: burlywood;
+  border-radius: 5px;
+}
+body{
+  /* Chỉ hiển thị thanh cuộn dọc */
+overflow-y: scroll;
+
+}
+ul{
+  list-style-type: none;
+}
+
+li.comment-item {
+  display: flex;
+  align-items: center;
+}
+
+li.comment-item div {
+  margin-left: 12px;
+}
+
+img.comment-avt {
+  object-fit: contain;
+}
+.btn-delete-cmt{
+  margin-left: auto;
+}
+
+.img-post{
+  object-fit: contain!important;
+  height: 500px!important;
+  width: 100%;
+}
+
+:root {
+  --main-color: #9becd8;
+  --topbar-color: #7ebfaf;
+  --hover-color-menu: #51c998;
+  --btn-color-login: #308c5a;
+  --text-color-login: #67e3a0;
+}
+
+.topbar {
+  background: var(--topbar-color);
+  padding: 10px 0;
+}
+
+span.item-topbar-text {
+  font-size: 13px;
+}
+
+.wrapper-item-topbar {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+a.item-top-link {
+  color: white;
+  text-decoration: none;
+}
+
+ol,
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul.list-icon-topbar {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.wrapper-item-topbar.right {
+  justify-content: end;
+  height: 100%;
+}
+
+li.item-icon-topbar a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+li.item-icon-topbar {
+  margin-left: 8px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+
+.item-link-header.active {
+  border-radius: 26px;
+  border: 2px solid var(--hover-color-menu);
+  background: white;
+}
+a.item-link-header {
+  padding: 9px 5px;
+  font-size: 12px;
+}
+
+a.btn-login {
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--btn-color-login);
+  color: var(--text-color-login);
+  padding: 10px 6px;
+  border-radius: 12px;
+}
+
+.item-menu-header {
+  display: flex;
+  align-items: center;
+  color: black;
+  font-weight: 700;
+}
+
+.text_logo {
+  color: black;
+}
+
+.footer .text_logo {
+  color: white;
+}
+
+.carousel-caption {
+  position: absolute;
+  right: 15%;
+  bottom: 13.25rem;
+  left: 15%;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  color: #fff;
+  text-align: center;
+}
+.img-slider {
+  position: relative;
+}
+
+.img-slider{
+  position: relative; 
+  z-index: -1;
+}
+
+.img-slider::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-color: #83bc9e78;
+}
+section.seaction-header {
+  z-index: 999;
+  position: relative;
+}
+
+
+.page-login{
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #73A58A;
+  background-blend-mode: overlay;
+}
+
+.header-page{
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #73a58a;
+  background-blend-mode: overlay;
+}
+
+.items-siderbaradmin.active{
+  border: 1px solid #2D754E;
+  background-color: #74C99B;
+}
+
+@media screen and (max-width: 789px) {
+  .menu-header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    background: var(--topbar-color);
+  }
+  .btn-closemenu{
+    position: absolute;
+    top: 23px;
+    right: 23px;
+  }
+  .menu-open {
+    display: none; /* Hiển thị menu khi được áp dụng */
+  }
+  
+  .hidden {
+    display: none; /* Ẩn phần tử khi được áp dụng */
+  }
+  
+}
+
+.editorClassName{
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
