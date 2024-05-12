@@ -84,8 +84,16 @@ public class ApiBaiVietController {
     @GetMapping("/post/")
     @CrossOrigin
     public ResponseEntity<List<PostResponseDTO>> getPosts(@RequestParam Map<String, String> params) {
-        List<PostResponseDTO> postResponseRedis = redisService.getListFromRedis("baiviet", PostResponseDTO.class);
-        if (!params.isEmpty() || postResponseRedis == null) {
+        List<PostResponseDTO> postResponseRedis = new ArrayList<>();
+        if (params.get("page") != null) {
+            postResponseRedis = redisService.getListFromRedis("baiviet:page:" + Integer.parseInt(params.get("page")), PostResponseDTO.class);
+        } else if (params.get("iduser") != null) {
+            postResponseRedis = redisService.getListFromRedis("baiviet:iduser:" + Integer.parseInt(params.get("iduser")), PostResponseDTO.class);
+        } else {
+            postResponseRedis = redisService.getListFromRedis("baiviet", PostResponseDTO.class);
+        }
+
+        if (postResponseRedis == null) {
             List<PostResponseDTO> postResponseDTOs = new ArrayList<>();
             List<BaiViet> posts = this.postService.getPostList(params);
             JMapper<UserResponseDTO, ThanhVien> userMapper = new JMapper<>(UserResponseDTO.class, ThanhVien.class);
@@ -154,11 +162,17 @@ public class ApiBaiVietController {
                 }
 
             });
-            redisService.saveObjectToRedis(postResponseDTOs, "baiviet");
+            if (params.get("page") != null) {
+                redisService.saveObjectToRedis(postResponseDTOs, "baiviet:page:" + Integer.parseInt(params.get("page")));
+            } else if (params.get("iduser") != null) {
+                redisService.saveObjectToRedis(postResponseDTOs, "baiviet:iduser:" + Integer.parseInt(params.get("iduser")));
+            } else {
+                redisService.saveObjectToRedis(postResponseDTOs, "baiviet");
+            }
+            
 
             return new ResponseEntity<>(postResponseDTOs, HttpStatus.OK);
-        }
-        else{
+        } else {
             return new ResponseEntity<>(postResponseRedis, HttpStatus.OK);
         }
 
@@ -307,7 +321,7 @@ public class ApiBaiVietController {
             redisService.flushAll();
             postResponseDTO.setStartPrice(post.getGiaKhoiDiem());
         }
-        
+
         return new ResponseEntity<>(postResponseDTO, HttpStatus.OK);
 
     }

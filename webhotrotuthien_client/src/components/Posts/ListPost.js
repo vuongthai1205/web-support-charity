@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 
 import apiConfig from "../../config/apiConfig";
 import { useSearchParams } from "react-router-dom";
+import { useWebSocketContext } from "contexts/useWebSocketContext";
 
 function ListPost(props) {
   const [loading, setLoading] = useState(true);
@@ -19,6 +20,7 @@ function ListPost(props) {
   const [pages, setPages] = useState(0);
   const [user, dispatch] = useContext(MyUserContext);
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const renderListPost = () => {
@@ -59,8 +61,9 @@ function ListPost(props) {
     if (!user) {
       navigate("/login");
     } else {
+      
       try {
-        const response = await authApi().post(
+        const response = await authApi.post(
           `${endpoints["like-post"]}${id}/`
         );
 

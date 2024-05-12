@@ -9,7 +9,7 @@ function ItemAuction(auction) {
   const handleWinnerAuction = async (id) => {
     setIsLoading(true); // Set loading to true while waiting for the response
     try {
-      const response = await authApi().put(`${endpoints["auction"]}`, {
+      const response = await authApi.put(`${endpoints["auction"]}`, {
         idPost: auction.idPost,
         idUser: auction.idUser,
       });

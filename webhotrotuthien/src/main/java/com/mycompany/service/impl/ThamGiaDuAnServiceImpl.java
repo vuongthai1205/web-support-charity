@@ -9,6 +9,7 @@ import com.mycompany.pojo.ThamGiaDuAn;
 import com.mycompany.pojo.ThamGiaDuAnPK;
 import com.mycompany.pojo.ThanhVien;
 import com.mycompany.repository.ThamGiaDuAnRepository;
+import com.mycompany.repository.ThanhVienRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.mycompany.service.ThamGiaDuAnService;
@@ -22,9 +23,18 @@ import java.util.List;
 public class ThamGiaDuAnServiceImpl implements ThamGiaDuAnService{
     @Autowired
     private ThamGiaDuAnRepository thamGiaDuAnRepository;
+    
+    @Autowired
+    private ThanhVienRepository thanhVienRepository;
 
     @Override
     public boolean addUserToProject(ThamGiaDuAn thamGiaDuAn) {
+        if(thamGiaDuAn.getSoTienDongGop() != null){
+            ThanhVien t = thanhVienRepository.getUserById(thamGiaDuAn.getThanhVien().getMaThanhVien());
+            
+            t.setTongTien(t.getTongTien() - thamGiaDuAn.getSoTienDongGop());
+            thanhVienRepository.addOrUpdateUser(t);
+        }
         return this.thamGiaDuAnRepository.addUserToProject(thamGiaDuAn);
     }
 
@@ -45,6 +55,12 @@ public class ThamGiaDuAnServiceImpl implements ThamGiaDuAnService{
 
     @Override
     public boolean deleteJoinProject(ThamGiaDuAn thamGiaDuAn) {
+        if(thamGiaDuAn.getSoTienDongGop() != null){
+            ThanhVien t = thanhVienRepository.getUserById(thamGiaDuAn.getThanhVien().getMaThanhVien());
+            
+            t.setTongTien(t.getTongTien() + thamGiaDuAn.getSoTienDongGop());
+            thanhVienRepository.addOrUpdateUser(t);
+        }
         return this.thamGiaDuAnRepository.deleteJoinProject(thamGiaDuAn);
     }
     

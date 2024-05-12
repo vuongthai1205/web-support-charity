@@ -1,8 +1,9 @@
-import { Suspense, lazy, useState } from "react";
-import { Link } from "react-router-dom";
-import { authApi, endpoints } from "config/apiConfig";
+import { Suspense, lazy, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { authApi, endpoints } from 'config/apiConfig';
+import ImagePost from 'components/Posts/ImagePost';
 const EditCommentProject = lazy(() => import('./EditCommentProject'));
-function ListComment({listComment, user, onUpdateComment, message}) {
+function ListComment({ listComment, user, onUpdateComment, message }) {
     const [showEditCmt, setShowEditCmt] = useState({});
     const handleCloseEditCmt = (index) => {
         // Đóng popup chỉ cho mục có index tương ứng
@@ -14,7 +15,7 @@ function ListComment({listComment, user, onUpdateComment, message}) {
     };
     const handleDeleteComment = async (id) => {
         try {
-            const response = await authApi().delete(`${endpoints['commentProject']}${id}/`);
+            const response = await authApi.delete(`${endpoints['commentProject']}${id}/`);
             if (response.status === 200) {
                 onUpdateComment();
             } else {
@@ -29,23 +30,21 @@ function ListComment({listComment, user, onUpdateComment, message}) {
             {listComment !== null && listComment.length > 0 ? (
                 listComment.map((item, id) => {
                     return (
-                        <li key={item.id} className="border-b-[1px] border-black mb-[12px]">
-                            <div className="flex items-center">
+                        <li key={item.id} className="border-b-[1px]  mb-[12px]">
+                            <div className="flex items-start">
                                 <img src={item.image} alt="" width={100} height={100} />
                                 <div className="flex flex-column ml-[12px]">
                                     <Link className="text-color-btn-main" to={`/profile?iduser=${item.idUser}`}>
                                         <h3 className="comment-user-name">{item.username}</h3>
                                     </Link>
-                                    <h4 className="comment-content">{item.content}</h4>
-                                    {item.images.map((e, i) => {
-                                        return <img key={i} src={e.link} width={100} />;
-                                    })}
+                                    <h4 className="comment-content mb-1">{item.content}</h4>
+                                    {item.images?.length > 0 ? <ImagePost listImage={item.images} /> : <></>}
                                 </div>
 
                                 {user !== null && user.username === item.username ? (
                                     <div className="ml-auto flex flex-column">
                                         <button
-                                            className="mb-[8px] inline-block p-[12px] text-white font-bold cursor-pointer rounded-[12px] bg-color-btn-info"
+                                            className="mb-[8px] inline-block py-[8px] px-[12px] text-white font-bold cursor-pointer rounded-[12px] bg-color-btn-info"
                                             onClick={() => handleShowEditCmt(id)}>
                                             Sửa
                                         </button>
@@ -65,7 +64,7 @@ function ListComment({listComment, user, onUpdateComment, message}) {
                                                     handleDeleteComment(item.id);
                                                 }
                                             }}
-                                            className="mb-[8px] inline-block p-[12px] text-white font-bold cursor-pointer rounded-[12px] bg-color-btn-danger">
+                                            className="mb-[8px] inline-block py-[8px] px-[12px] text-white font-bold cursor-pointer rounded-[12px] bg-color-btn-danger">
                                             Xóa
                                         </button>
                                     </div>

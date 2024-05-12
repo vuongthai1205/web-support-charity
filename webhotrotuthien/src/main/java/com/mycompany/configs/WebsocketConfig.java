@@ -29,26 +29,65 @@ import org.springframework.context.annotation.Configuration;
  * @author vuong
  */
 @Configuration
-@ServerEndpoint(value = "/letschat/{login-id}")
+@ServerEndpoint(value = "/notify/{username}",encoders = {MessageEncoder.class},
+        decoders = {MessageDecoder.class})
 public class WebsocketConfig {
 
+    private Session session;
+    private static Set<WebsocketConfig> chatEndpoints 
+      = new CopyOnWriteArraySet<>();
+    private static HashMap<String, String> users = new HashMap<>();
+
     @OnOpen
-    public void connected(Session session, @PathParam("login-id") String loggedInUser) {
-        //save the logged in user id
-        session.getUserProperties().put("USERNAME", loggedInUser);
-        System.out.println(session.getUserProperties());
+    public void onOpen(
+      Session session, 
+      @PathParam("username") String username) throws IOException, EncodeException {
+ 
+        this.session = session;
+        chatEndpoints.add(this);
+        users.put(session.getId(), username);
+
+        Message message = new Message();
+        message.setFrom(username);
+        message.setContent("Connected!");
+        broadcast(message);
     }
-    
+
     @OnMessage
-    public void OnMessageCallback(Session session,String messageFromClient) throws IOException{
-       session.getBasicRemote().sendText("got your message ");
+    public void onMessage(Session session, Message message) 
+      throws IOException, EncodeException {
+ 
+        message.setFrom(users.get(session.getId()));
+        broadcast(message);
     }
 
     @OnClose
-    public void disconnected(Session session, CloseReason reason) {
-        String peer = (String) session.getUserProperties().get("USERNAME");
-        CloseReason.CloseCode closeReasonCode = reason.getCloseCode();
-        String closeReasonMsg = reason.getReasonPhrase();
-        System.out.println("User " + peer + " disconnected. Code: " + closeReasonCode + ", Message: " + closeReasonMsg);
+    public void onClose(Session session) throws IOException, EncodeException {
+ 
+        chatEndpoints.remove(this);
+        Message message = new Message();
+        message.setFrom(users.get(session.getId()));
+        message.setContent("Disconnected!");
+        broadcast(message);
+    }
+
+    @OnError
+    public void onError(Session session, Throwable throwable) {
+        // Do error handling here
+    }
+
+    private static void broadcast(Message message) 
+      throws IOException, EncodeException {
+ 
+        chatEndpoints.forEach(endpoint -> {
+            synchronized (endpoint) {
+                try {
+                    endpoint.session.getBasicRemote().
+                      sendObject(message);
+                } catch (IOException | EncodeException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

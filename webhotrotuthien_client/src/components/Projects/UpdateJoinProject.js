@@ -28,7 +28,7 @@ function UpdateJoinProject({ project, showPopup, closePopup }) {
     }
 
     try {
-      const response = await authApi().put(
+      const response = await authApi.put(
         `${endpoints["joinProject"]}`,
         formData
       );
@@ -99,7 +99,7 @@ function UpdateJoinProject({ project, showPopup, closePopup }) {
                     placeholder="Nhập số tiền đóng góp..."
                     onChange={handleInputChange}
                     required
-                    disabled={isDisabledInput}
+                    disabled={true}
                   />
                 </Form.Group>
                 <Form.Group

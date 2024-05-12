@@ -13,6 +13,7 @@ import com.mycompany.pojo.ThanhVien;
 import com.mycompany.service.BaiVietService;
 import com.mycompany.service.DauGiaService;
 import com.mycompany.service.EmailService;
+import com.mycompany.service.RedisService;
 import com.mycompany.service.ThanhVienService;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 @CrossOrigin
 public class ApiDauGiaController {
+
     @Autowired
     private DauGiaService auctionService;
     @Autowired
@@ -46,20 +48,24 @@ public class ApiDauGiaController {
     private ThanhVienService userService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private RedisService redisService;
+
     @GetMapping("/test-email/")
     public String testEmail() {
         this.emailService.sendSimpleMessage("giavuong.1205@gmail.com", "test", "test");
         return "thanh cong";
     }
-    
-    
+
     @PostMapping("/auction/")
     public ResponseEntity<String> addAuction(Principal user, @RequestBody AuctionRequestDTO auctionRequestDTO) {
         ThanhVien u = this.userService.getUserByUsername(user.getName());
         BaiViet post = this.postService.getPostById(auctionRequestDTO.getIdPost());
-
+        if (auctionRequestDTO.getPrice() > u.getTongTien()) {
+            return new ResponseEntity<>("not oke", HttpStatus.CONFLICT);
+        }
         if (this.auctionService.checkAuctionExist(u, post)) {
-            return new ResponseEntity<>("Ban da dau gia bai viet", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Ban da dau gia bai viet", HttpStatus.NO_CONTENT);
         }
         if (auctionRequestDTO.getPrice() < post.getGiaKhoiDiem()) {
             return new ResponseEntity<>("Vui lòng cho giá cao hon giá khoi diem", HttpStatus.BAD_REQUEST);
@@ -70,8 +76,11 @@ public class ApiDauGiaController {
             auction.setThanhVien(u);
             auction.setBaiViet(post);
             auction.setGiaTien(auctionRequestDTO.getPrice());
-            if (this.auctionService.addAuction(auction)) {
 
+            if (this.auctionService.addAuction(auction)) {
+                u.setTongTien(u.getTongTien() - auctionRequestDTO.getPrice());
+                userService.addOrUpdateUser(u);
+                redisService.flushAll();
                 return new ResponseEntity<>("Thành Công", HttpStatus.CREATED);
             } else {
                 return new ResponseEntity<>("Không thành công ", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -83,9 +92,8 @@ public class ApiDauGiaController {
     public ResponseEntity<?> updateAuction(Principal user, @RequestBody AuctionRequestDTO auctionRequestDTO) {
         try {
             ThanhVien u = this.userService.getUserByUsername(user.getName());
-            
-            
-            DauGia auction = this.auctionService.getAuctionById(auctionRequestDTO.getIdUser(),auctionRequestDTO.getIdPost());
+
+            DauGia auction = this.auctionService.getAuctionById(auctionRequestDTO.getIdUser(), auctionRequestDTO.getIdPost());
             BaiViet post = this.postService.getPostById(auction.getBaiViet().getMaBaiViet());
             if (!post.getMaThanhVien().equals(u)) {
                 return new ResponseEntity<>("you do not have access", HttpStatus.BAD_REQUEST);
@@ -136,7 +144,7 @@ public class ApiDauGiaController {
                 auctionResponseDTO.setUsername(a.getThanhVien().getTenDangNhap());
                 auctionResponseDTO.setAvatar(a.getThanhVien().getAnhDaiDien());
                 auctionResponseDTO.setPrice(a.getGiaTien());
-                auctionResponseDTO.setWinnerAuctioned((a.getDaThangDauGia()== 1));
+                auctionResponseDTO.setWinnerAuctioned((a.getDaThangDauGia() == 1));
                 auctionResponseDTO.setIdPost(a.getBaiViet().getMaBaiViet());
                 auctionResponseDTO.setIdUser(a.getThanhVien().getMaThanhVien());
                 auctionResponseDTOs.add(auctionResponseDTO);

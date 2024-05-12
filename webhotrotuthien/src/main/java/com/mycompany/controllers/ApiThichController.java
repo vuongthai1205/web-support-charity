@@ -9,6 +9,7 @@ import com.mycompany.pojo.ThanhVien;
 import com.mycompany.pojo.TvThichBv;
 import com.mycompany.pojo.TvThichBvPK;
 import com.mycompany.service.BaiVietService;
+import com.mycompany.service.RedisService;
 import com.mycompany.service.ThanhVienService;
 import com.mycompany.service.ThichService;
 import java.security.Principal;
@@ -36,6 +37,8 @@ public class ApiThichController {
     private BaiVietService postService;
     @Autowired
     private ThanhVienService userService;
+    @Autowired
+    private RedisService redisService;
 
     @PostMapping("/post/like/{id}/")
     public ResponseEntity<String> addLike(Principal user, @PathVariable(value = "id") int id) {
@@ -49,6 +52,7 @@ public class ApiThichController {
                 likePost.setIsLike(true);
             }
             if (this.likeService.updateLike(likePost) == true) {
+                redisService.flushAll();
                 return new ResponseEntity<>("Liked", HttpStatus.CREATED);
             }
         } else {
@@ -61,6 +65,7 @@ public class ApiThichController {
             likePost.setThanhVien(u);
             likePost.setIsLike(true);
             if (this.likeService.addLike(likePost) == true) {
+                redisService.flushAll();
                 return new ResponseEntity<>("Liked", HttpStatus.CREATED);
             }
         }

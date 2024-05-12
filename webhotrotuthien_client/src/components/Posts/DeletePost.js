@@ -7,7 +7,7 @@ function DeletePost({onPostUpdate, post, showPopup, closePopup }) {
   const handleDeletePost = async (id) => {
     try{
 
-      const response = await authApi().delete(`${endpoints["posts"]}${id}/`)
+      const response = await authApi.delete(`${endpoints["posts"]}${id}/`)
       if(response.status === 200){
         onPostUpdate()
         console.log("delete oke")

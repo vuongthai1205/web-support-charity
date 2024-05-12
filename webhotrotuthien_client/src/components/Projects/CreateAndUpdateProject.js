@@ -128,7 +128,7 @@ function CreateAndUpdateProject({
 
     if (project !== undefined) {
       try {
-        const response = await authApi().put(
+        const response = await authApi.put(
           `${endpoints["project"]}${project.id}/`,
           formData
         );
@@ -155,7 +155,7 @@ function CreateAndUpdateProject({
       }
     } else {
       try {
-        const response = await authApi().post(endpoints["project"], formData);
+        const response = await authApi.post(endpoints["project"], formData);
 
         if (response.status === 201) {
           onProjectCreated();

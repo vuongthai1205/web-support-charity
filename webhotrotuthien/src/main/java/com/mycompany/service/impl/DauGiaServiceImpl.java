@@ -10,6 +10,7 @@ import com.mycompany.pojo.ThanhVien;
 import com.mycompany.pojo.TrangThaiDauGia;
 import com.mycompany.repository.BaiVietRepository;
 import com.mycompany.repository.DauGiaRepository;
+import com.mycompany.repository.ThanhVienRepository;
 import com.mycompany.repository.TrangThaiDauGiaRepository;
 import com.mycompany.service.DauGiaService;
 import java.util.Date;
@@ -32,10 +33,18 @@ public class DauGiaServiceImpl implements DauGiaService {
 
     @Autowired
     private TrangThaiDauGiaRepository trangThaiDauGiaRepository;
+    @Autowired
+    private ThanhVienRepository thanhVienRepository;
 
     @Override
     public boolean addAuction(DauGia auction) {
         auction.setIsWinnerAuction(false);
+        if(auction.getGiaTien()!= null){
+            ThanhVien t = thanhVienRepository.getUserById(auction.getThanhVien().getMaThanhVien());
+            
+            t.setTongTien(t.getTongTien() - auction.getGiaTien());
+            thanhVienRepository.addOrUpdateUser(t);
+        }
         return this.dauGiaRepository.addAuction(auction);
     }
 
@@ -70,8 +79,8 @@ public class DauGiaServiceImpl implements DauGiaService {
     }
 
     @Override
-    public DauGia getAuctionById(int thanhVienId, int  baiVietId) {
-        return this.dauGiaRepository.getAuctionById(thanhVienId,baiVietId);
+    public DauGia getAuctionById(int thanhVienId, int baiVietId) {
+        return this.dauGiaRepository.getAuctionById(thanhVienId, baiVietId);
     }
 
     @Override

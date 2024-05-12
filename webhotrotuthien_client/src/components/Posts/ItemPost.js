@@ -9,7 +9,11 @@ import ListAuction from "../Auctions/ListAuction";
 import ImagePost from "./ImagePost";
 import parse from "html-react-parser";
 import { formatCurrency } from "functions";
+import { useWebSocketContext } from "contexts/useWebSocketContext";
+import { toast } from "react-toastify";
+
 function ItemPost({ onPostUpdate, post, xuLyThichBaiViet }) {
+  const { sendMessage, lastMessage, readyState } = useWebSocketContext();
   const [user, dispatch] = useContext(MyUserContext);
   const [like, setLike] = useState(false);
   const [action, setAction] = useState(false);
@@ -61,7 +65,16 @@ function ItemPost({ onPostUpdate, post, xuLyThichBaiViet }) {
   }, [user, post, listAuction]);
 
   const handleLikeClick = () => {
+    if (!user) {
+      // Người dùng chưa xác thực, chuyển hướng đến trang đăng nhập
+      navigate("/login");
+      toast.error("Vui lòng đăng nhập để thực hiện tính năng")
+      return;
+    }
     setLike((prevLike) => !prevLike);
+    sendMessage(JSON.stringify({to: post?.user.username, content: `${user.username} vừa ${!like ? "thích" : "bỏ thích"} bài viết ${post.title} của bạn` }));
+    console.log(post.user, JSON.parse(lastMessage.data))
+    
     xuLyThichBaiViet(post.id);
   };
 
@@ -101,7 +114,7 @@ function ItemPost({ onPostUpdate, post, xuLyThichBaiViet }) {
 
   const handleShowAuction = async (id) => {
     try {
-      const response = await authApi().get(`${endpoints["auction"]}${id}/`);
+      const response = await authApi.get(`${endpoints["auction"]}${id}/`);
       setListAuction(response.data);
     } catch (ex) {
       console.log(ex);
@@ -113,7 +126,7 @@ function ItemPost({ onPostUpdate, post, xuLyThichBaiViet }) {
   const handleSubmitStartPrice = async (e) => {
     e.preventDefault();
     try {
-      const response = await authApi().post(endpoints["auction"], formPrice);
+      const response = await authApi.post(endpoints["auction"], formPrice);
 
       if (response.status === 201) {
         setFormPrice({ price: "" });
@@ -156,7 +169,7 @@ function ItemPost({ onPostUpdate, post, xuLyThichBaiViet }) {
       navigate("/login");
     } else {
       try {
-        const response = await authApi().post(
+        const response = await authApi.post(
           `${endpoints["comment"]}${post.id}/`,
           formComment
         );
@@ -178,7 +191,7 @@ function ItemPost({ onPostUpdate, post, xuLyThichBaiViet }) {
 
   const handleDeleteComment = async (id) => {
     try {
-      const response = await authApi().delete(`${endpoints["comment"]}${id}/`);
+      const response = await authApi.delete(`${endpoints["comment"]}${id}/`);
       if (response.status === 200) {
         onPostUpdate();
       } else {

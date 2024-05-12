@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UpdateJoinProject from "./UpdateJoinProject";
 import { Spinner } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 function ListJoinProject({ project }) {
   const [list, setList] = useState([]);
@@ -15,10 +16,17 @@ function ListJoinProject({ project }) {
   useEffect(() => {
     const showList = async () => {
       setIsLoading(true);
+      if (!user) {
+        // Người dùng chưa xác thực, chuyển hướng đến trang đăng nhập
+        navigate("/login");
+        toast.error("Vui lòng đăng nhập để thực hiện tính năng")
+        return;
+      }
       try {
-        const response = await apiConfig.get(
+        const response = await authApi.get(
           `${endpoints["joinProject"]}${project.id}/`
         );
+        console.log("from list join"+response)
         if (response.status === 200) {
           setList(response.data);
         } else {
@@ -26,7 +34,7 @@ function ListJoinProject({ project }) {
         }
         setIsLoading(false);
       } catch (ex) {
-        console.log(ex);
+        console.log("from list join"+ex);
         setIsLoading(false);
       }
     };
@@ -36,7 +44,7 @@ function ListJoinProject({ project }) {
 
   const handleDeleteJoinProject = async (idUser, idProject) => {
     try {
-      const response = await authApi().delete(
+      const response = await authApi.delete(
         `${endpoints["joinProject"]}${idProject}/${idUser}/`
       );
 
@@ -103,7 +111,7 @@ function ListJoinProject({ project }) {
                       className="mb-[8px] inline-block p-[12px] text-white font-bold cursor-pointer rounded-[12px] bg-color-btn-danger"
                       onClick={() => {
                         if (
-                          window.confirm("Bạn có chắc muốn xóa bình luận này ?")
+                          window.confirm("Bạn có chắc muốn xóa đăng ký tham của bạn ?")
                         ) {
                           handleDeleteJoinProject(
                             item.user.id,

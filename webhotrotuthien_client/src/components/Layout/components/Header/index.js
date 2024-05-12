@@ -4,9 +4,6 @@ import {
   Button,
   Col,
   Container,
-  Nav,
-  Navbar,
-  NavDropdown,
   Row,
 } from "react-bootstrap"; // Import components from react-bootstrap
 import Image from "react-bootstrap/Image";
@@ -20,6 +17,7 @@ import {
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { logofooter } from "assets/img";
+import { formatCurrency } from "functions";
 function Header() {
   const [user, dispatch] = useContext(MyUserContext);
   const handleLogout = () => {
@@ -108,7 +106,7 @@ function Header() {
                             roundedCircle
                             src={user.anhDaiDien}
                           />
-                          Xin chào {user.username}
+                          Xin chào {user.username} - {user?.tongTien === null ? formatCurrency(0) : formatCurrency(user.tongTien)}
                         </NavLink>
                       </li>
                       <li className="item-menu-header ml-[13px] flex items-center ">

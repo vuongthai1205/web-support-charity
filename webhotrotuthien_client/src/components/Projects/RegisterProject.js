@@ -1,11 +1,12 @@
 import { MyUserContext } from "App";
 import { authApi, endpoints } from "config/apiConfig";
+import { formatCurrency } from "functions";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { useState } from "react";
 import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-
+import cookie from "react-cookies";
 function RegisterProject({ project, showPopup, closePopup }) {
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
@@ -28,12 +29,19 @@ function RegisterProject({ project, showPopup, closePopup }) {
     setIsLoading(true);
 
     try {
-      const response = await authApi().post(
+      const response = await authApi.post(
         `${endpoints["joinProject"]}`,
         formData
       );
       if (response.status === 201) {
         closePopup();
+        let { data } = await authApi.get(endpoints["current-user"]);
+        cookie.save("user", data);
+
+        dispatch({
+          type: "login",
+          payload: data,
+        });
         navigate("/project-charity");
         console.log("Project updated successfully");
       } else if (response.status === 500) {
@@ -50,8 +58,8 @@ function RegisterProject({ project, showPopup, closePopup }) {
         alert(
           "Xin lỗi bạn đã đăng ký dự án này, Vui lòng tham khảo dự án khác"
         );
-      } else {
-        alert("có lỗi khi đăng ký dự án");
+      } else if(ex.response.status === 409) {
+        alert(`Số tiền đóng góp đang cao hơn số tiền bạn hiện có. \nSố tiền hiện có của bạn là: ${ formatCurrency(user.tongTien) }`);
       }
       setIsLoading(false);
     }

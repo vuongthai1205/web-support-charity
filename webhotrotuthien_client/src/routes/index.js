@@ -35,16 +35,16 @@ const publicRoutes = [
     path: "/test-websocket",
     component: TestWebsocket,
     title: "Dự án từ thiện",
+  },{
+    path: "/project-charity/:projectId",
+    component: DetailProject,
+    title: "Dự án từ thiện",
   },
 ];
 
 const privateRoutes = [
   { path: "/post-auction/:postId", component: PostDetail },
-  {
-    path: "/project-charity/:projectId",
-    component: DetailProject,
-    title: "Dự án từ thiện",
-  },
+  
   { path: "/profile", component: Profile, title: "Trang cá nhân" },
 ];
 

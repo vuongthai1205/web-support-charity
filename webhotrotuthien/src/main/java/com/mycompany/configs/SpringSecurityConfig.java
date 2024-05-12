@@ -95,6 +95,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/stats/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers(HttpMethod.GET, "/stats-project/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers(HttpMethod.GET, "/report/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers(HttpMethod.GET, "/request-form/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MEMBER')")
                 .antMatchers(HttpMethod.GET, "/charityproject/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MEMBER')")
                 .antMatchers(HttpMethod.GET, "/detail-charityproject/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MEMBER')")
                 .antMatchers(HttpMethod.GET, "/delete-charityproject/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MEMBER')")

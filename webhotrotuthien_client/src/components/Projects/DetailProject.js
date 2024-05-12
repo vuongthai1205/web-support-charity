@@ -25,6 +25,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import appFirebase from 'config/firebase';
 import { ACCESS_COMMENT } from 'utils/constant';
 import ListComment from './ListComment';
+import { toast } from 'react-toastify';
 
 const ListJoinProject = lazy(() => import('./ListJoinProject'));
 
@@ -63,8 +64,14 @@ function DetailProject() {
     const handleTabChange = async (tab) => {
         setActiveTab(tab);
         if (activeTab === ACCESS_COMMENT.PUBLIC) {
+            if (!user) {
+                // Người dùng chưa xác thực, chuyển hướng đến trang đăng nhập
+                navigate('/login');
+                toast.error('Vui lòng đăng nhập để thực hiện tính năng');
+                return;
+            }
             try {
-                const response = await authApi().get(`${endpoints.commentProjectPrivate}${projectId}/`);
+                const response = await authApi.get(`${endpoints.commentProjectPrivate}${projectId}/`);
 
                 if (response.status === 200) {
                     setListCommentPrivate(response.data);
@@ -72,7 +79,7 @@ function DetailProject() {
                     console.log(response.error);
                 }
             } catch (ex) {
-                if (ex.response.status) {
+                if (ex.response) {
                     setMessageError('Không thể xem các bình luận khi bạn chưa tham gia');
                 } else {
                     setMessageError('Chưa có bình luận');
@@ -150,7 +157,7 @@ function DetailProject() {
         }
         try {
             if (activeTab === ACCESS_COMMENT.PUBLIC) {
-                const response = await authApi().post(`${endpoints['commentProject']}${project.id}/`, formComment);
+                const response = await authApi.post(`${endpoints['commentProject']}${project.id}/`, formComment);
                 if (response.status === 201) {
                     setFormComment({ content: '' });
                     handleProjectUpdate();
@@ -158,10 +165,7 @@ function DetailProject() {
                     console.log('lỗi rồi ');
                 }
             } else {
-                const response = await authApi().post(
-                    `${endpoints['commentProjectPrivate']}${project.id}/`,
-                    formComment
-                );
+                const response = await authApi.post(`${endpoints['commentProjectPrivate']}${project.id}/`, formComment);
                 if (response.status === 201) {
                     setFormComment({ content: '' });
                     handleProjectUpdate();

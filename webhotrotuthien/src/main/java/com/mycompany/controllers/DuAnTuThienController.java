@@ -9,6 +9,7 @@ import com.mycompany.pojo.DuAnTuThien;
 import com.mycompany.pojo.HinhAnhDuAn;
 import com.mycompany.service.DuAnTuThienService;
 import com.mycompany.service.HinhAnhDuAnService;
+import com.mycompany.service.RedisService;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
@@ -31,6 +32,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class DuAnTuThienController {
     @Autowired
     private DuAnTuThienService duAnTuThienService;
+    @Autowired
+    private RedisService redisService;
     
     @RequestMapping("/charityproject")
     public String getAll(Model model, @RequestParam Map<String, String> params){
@@ -58,8 +61,11 @@ public class DuAnTuThienController {
             BindingResult rs){
         if(!rs.hasErrors()){
             
-            if(this.duAnTuThienService.addOrUpdateCharityProject(project) == true)
+            if(this.duAnTuThienService.addOrUpdateCharityProject(project) == true){
+                redisService.flushAll();
                 return "redirect:/charityproject";
+            }
+                
         }
         return "detail-charityproject";
     }

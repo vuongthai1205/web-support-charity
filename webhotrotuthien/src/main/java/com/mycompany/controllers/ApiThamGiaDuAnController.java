@@ -15,6 +15,7 @@ import com.mycompany.pojo.ThanhVien;
 import com.mycompany.pojo.VaiTroThamGiaDa;
 import com.mycompany.service.DuAnTuThienService;
 import com.mycompany.service.EmailService;
+import com.mycompany.service.RedisService;
 import com.mycompany.service.ThamGiaDuAnService;
 import com.mycompany.service.ThanhVienService;
 import com.mycompany.service.VaiTroThamGiaDuAnService;
@@ -59,6 +60,9 @@ public class ApiThamGiaDuAnController {
     public ResponseEntity<String> addJoinProject(Principal user, @RequestBody JoinProjectRequestDTO joinProjectRequestDTO) {
         ThanhVien u = this.thanhVienService.getUserByUsername(user.getName());
         DuAnTuThien duAnTuThien = this.duAnTuThienService.getDuAnTuThienById(joinProjectRequestDTO.getIdProject());
+        if (joinProjectRequestDTO.getContributionAmount() > u.getTongTien()) {
+            return new ResponseEntity<>("not oke", HttpStatus.CONFLICT);
+        }
         ThamGiaDuAn thamGiaDuAn = new ThamGiaDuAn();
 
         thamGiaDuAn.setDuAnTuThien(duAnTuThien);
@@ -72,11 +76,11 @@ public class ApiThamGiaDuAnController {
         thamGiaDuAn.setThamGiaDuAnPK(duAnPK);
         if (this.thamGiaDuAnService.addUserToProject(thamGiaDuAn)) {
             this.emailService.sendSimpleMessage(thamGiaDuAn.getThanhVien().getEmail(), "Thank you for join project",
-                    "Thank " + 
-                    thamGiaDuAn.getThanhVien().getTen() +
-                    ", for participating in " +
-                    thamGiaDuAn.getDuAnTuThien().getTenDuAn() +
-                    " project");
+                    "Thank "
+                    + thamGiaDuAn.getThanhVien().getTen()
+                    + ", for participating in "
+                    + thamGiaDuAn.getDuAnTuThien().getTenDuAn()
+                    + " project");
             return new ResponseEntity<>("oke", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>("not oke", HttpStatus.BAD_REQUEST);

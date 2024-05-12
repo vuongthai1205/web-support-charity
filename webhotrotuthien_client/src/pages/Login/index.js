@@ -33,7 +33,7 @@ function Login() {
         setLoading(false);
 
         cookie.save("token", response.data.token);
-        let { data } = await authApi().get(endpoints["current-user"]);
+        let { data } = await authApi.get(endpoints["current-user"]);
         cookie.save("user", data);
 
         dispatch({

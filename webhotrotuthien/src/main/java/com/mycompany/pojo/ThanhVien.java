@@ -36,6 +36,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,6 +51,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NamedQueries({
     @NamedQuery(name = "ThanhVien.findAll", query = "SELECT t FROM ThanhVien t")})
 public class ThanhVien implements UserDetails {
+    
 
     @PrePersist
     protected void onCreate(){
@@ -113,6 +115,8 @@ public class ThanhVien implements UserDetails {
     @Column(name = "AnhDaiDien")
     @JMap("avatar")
     private String anhDaiDien;
+    @Column(name = "TongTien")
+    private Double tongTien;
     @Column(name = "NgayTao")
     @Temporal(TemporalType.TIMESTAMP)
     @JMap("createAt")
@@ -153,6 +157,9 @@ public class ThanhVien implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "thanhVien1")
     @JsonIgnore
     private Set<BaoCaoThanhVien> baoCaoThanhVienSet1;
+    @JsonIgnore
+    @OneToMany(mappedBy = "maThanhVien")
+    private Collection<PhieuYeuCau> phieuYeuCauCollection;
     
     @Transient
     @JsonIgnore
@@ -519,6 +526,30 @@ public class ThanhVien implements UserDetails {
      */
     public void setFakePassword(String fakePassword) {
         this.fakePassword = fakePassword;
+    }
+
+
+    @XmlTransient
+    public Collection<PhieuYeuCau> getPhieuYeuCauCollection() {
+        return phieuYeuCauCollection;
+    }
+
+    public void setPhieuYeuCauCollection(Collection<PhieuYeuCau> phieuYeuCauCollection) {
+        this.phieuYeuCauCollection = phieuYeuCauCollection;
+    }
+
+    /**
+     * @return the tongTien
+     */
+    public Double getTongTien() {
+        return tongTien;
+    }
+
+    /**
+     * @param tongTien the tongTien to set
+     */
+    public void setTongTien(Double tongTien) {
+        this.tongTien = tongTien;
     }
 
 }

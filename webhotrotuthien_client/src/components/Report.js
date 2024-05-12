@@ -18,7 +18,7 @@ function Report({ id, showPopup, closePopup }) {
     
     try
     {
-      const response = await authApi().post(endpoints["report"], formReport)
+      const response = await authApi.post(endpoints["report"], formReport)
       if(response.status ===200){
         alert("Báo cáo thành viên thành công")
         closePopup()

@@ -24,14 +24,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableTransactionManagement
 @ComponentScan(basePackages = {
     "com.mycompany.controllers",
     "com.mycompany.repository",
-    "com.mycompany.service", 
+    "com.mycompany.service",
     "com.mycompany.components"})
 @Order(1)
 public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -65,22 +64,17 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 //        auth.userDetailsService(userDetailsService)
 //                .passwordEncoder(passwordEncoder());
 //    }
-    
-    
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http.csrf().ignoringAntMatchers("/api/**");
         http.authorizeRequests().antMatchers("/api/login/").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/user/add/").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/user/add/").permitAll();
         http.authorizeRequests().antMatchers("/api/post/").permitAll();
         http.authorizeRequests().antMatchers("/api/post/{id}/").permitAll();
         http.authorizeRequests().antMatchers("/api/post/count-pages/").permitAll();
         http.authorizeRequests().antMatchers("/api/charity-project/").permitAll();
         http.authorizeRequests().antMatchers("/api/charity-project/{id}/").permitAll();
         http.authorizeRequests().antMatchers("/api/charity-project/count-pages/").permitAll();
-        http.authorizeRequests().antMatchers("/api/join-project/{id}/").permitAll();
         http.antMatcher("/api/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint()).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MEMBER') or hasRole('ROLE_CUSTOMER')")
