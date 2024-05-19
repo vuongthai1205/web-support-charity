@@ -63,7 +63,7 @@ function ListPost(props) {
     } else {
       
       try {
-        const response = await authApi.post(
+        const response = await authApi().post(
           `${endpoints["like-post"]}${id}/`
         );
 

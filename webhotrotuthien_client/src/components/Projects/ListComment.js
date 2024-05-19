@@ -2,6 +2,7 @@ import { Suspense, lazy, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { authApi, endpoints } from 'config/apiConfig';
 import ImagePost from 'components/Posts/ImagePost';
+import parse from 'html-react-parser'
 const EditCommentProject = lazy(() => import('./EditCommentProject'));
 function ListComment({ listComment, user, onUpdateComment, message }) {
     const [showEditCmt, setShowEditCmt] = useState({});
@@ -15,7 +16,7 @@ function ListComment({ listComment, user, onUpdateComment, message }) {
     };
     const handleDeleteComment = async (id) => {
         try {
-            const response = await authApi.delete(`${endpoints['commentProject']}${id}/`);
+            const response = await authApi().delete(`${endpoints['commentProject']}${id}/`);
             if (response.status === 200) {
                 onUpdateComment();
             } else {
@@ -37,7 +38,7 @@ function ListComment({ listComment, user, onUpdateComment, message }) {
                                     <Link className="text-color-btn-main" to={`/profile?iduser=${item.idUser}`}>
                                         <h3 className="comment-user-name">{item.username}</h3>
                                     </Link>
-                                    <h4 className="comment-content mb-1">{item.content}</h4>
+                                    <h4 className="comment-content mb-1">{item.content ? parse(item.content) : ''} </h4>
                                     {item.images?.length > 0 ? <ImagePost listImage={item.images} /> : <></>}
                                 </div>
 

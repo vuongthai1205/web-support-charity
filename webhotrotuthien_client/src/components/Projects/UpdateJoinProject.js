@@ -28,7 +28,7 @@ function UpdateJoinProject({ project, showPopup, closePopup }) {
     }
 
     try {
-      const response = await authApi.put(
+      const response = await authApi().put(
         `${endpoints["joinProject"]}`,
         formData
       );

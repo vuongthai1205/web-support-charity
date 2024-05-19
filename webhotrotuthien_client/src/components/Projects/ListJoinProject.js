@@ -23,7 +23,7 @@ function ListJoinProject({ project }) {
         return;
       }
       try {
-        const response = await authApi.get(
+        const response = await authApi().get(
           `${endpoints["joinProject"]}${project.id}/`
         );
         console.log("from list join"+response)
@@ -44,7 +44,7 @@ function ListJoinProject({ project }) {
 
   const handleDeleteJoinProject = async (idUser, idProject) => {
     try {
-      const response = await authApi.delete(
+      const response = await authApi().delete(
         `${endpoints["joinProject"]}${idProject}/${idUser}/`
       );
 

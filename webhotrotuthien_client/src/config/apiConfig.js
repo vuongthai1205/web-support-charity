@@ -22,26 +22,17 @@ export const endpoints = {
     'request-form': `${SERVER_CONTEXT}/api/requestForm/`,
 };
 
-export const authApi = axios.create({
-    baseURL: SERVER,
-    headers: {
-        'Content-Type': 'application/json',
-        Authorization: cookie.load('token'),
-    },
-});
-
-authApi.interceptors.response.use(
-    function (response) {
-        return response;
-    },
-    function (error) {
-        if (401 === error.response.status) {
-            console.log('from interceptor');
-        } else {
-            return Promise.reject(error);
+export const authApi = () => {
+    return axios.create({
+        baseURL: SERVER,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization":  cookie.load("token")
         }
-    }
-);
+    })
+}
+
+
 
 export default axios.create({
     baseURL: SERVER,

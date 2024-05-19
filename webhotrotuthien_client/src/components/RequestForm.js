@@ -20,11 +20,11 @@ function RequestForm({ id, showPopup, closePopup }) {
     const handleSubmit = async () => {
         if (requestForm.moneyMount > 0) {
             try {
-                const response = await authApi.post(endpoints['request-form'], requestForm);
+                const response = await authApi().post(endpoints['request-form'], requestForm);
                 if (response.status === 201) {
                     alert('Gửi phiếu yêu cầu nạp tiền thành công, vui lòng đợi phản hồi từ admin');
                     closePopup();
-                    setMessage('')
+                    setMessage('');
                 } else {
                     alert('Thất bại');
                 }
@@ -42,6 +42,18 @@ function RequestForm({ id, showPopup, closePopup }) {
                     <Modal.Title>Xác nhận nạp tiền</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <p>
+                        <strong>Chủ tài khoản:</strong> THAI GIA VUONG
+                    </p>
+                    <p>
+                        <strong>Số tài khoản:</strong> 2051010367
+                    </p>
+                    <p>
+                        <strong>Ngân hàng:</strong> VIETCOMBANK
+                    </p>
+                    <p>
+                        <strong>Lưu ý:</strong> vui lòng chuyển tiền đúng với số tiền nhập vào biểu mẫu
+                    </p>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                         <Form.Label className="font-bold">Số tiền</Form.Label>
                         <Form.Control

@@ -23,7 +23,7 @@ function EditCommentProject({
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await authApi.put(
+      const response = await authApi().put(
         `${endpoints["commentProject"]}${comment.id}/`,
         formComment
       );

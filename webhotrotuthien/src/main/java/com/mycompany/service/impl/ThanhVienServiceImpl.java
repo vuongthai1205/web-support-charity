@@ -160,4 +160,9 @@ public class ThanhVienServiceImpl implements ThanhVienService {
         return this.thanhVienRepository.authUser(username, password);
     }
 
+    @Override
+    public void updateUser(ThanhVien user) {
+        this.thanhVienRepository.addOrUpdateUser(user);
+    }
+
 }

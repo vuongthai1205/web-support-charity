@@ -60,7 +60,7 @@ public class ApiThamGiaDuAnController {
     public ResponseEntity<String> addJoinProject(Principal user, @RequestBody JoinProjectRequestDTO joinProjectRequestDTO) {
         ThanhVien u = this.thanhVienService.getUserByUsername(user.getName());
         DuAnTuThien duAnTuThien = this.duAnTuThienService.getDuAnTuThienById(joinProjectRequestDTO.getIdProject());
-        if (joinProjectRequestDTO.getContributionAmount() > u.getTongTien()) {
+        if ( u.getTongTien() != null && joinProjectRequestDTO.getContributionAmount() > u.getTongTien()) {
             return new ResponseEntity<>("not oke", HttpStatus.CONFLICT);
         }
         ThamGiaDuAn thamGiaDuAn = new ThamGiaDuAn();

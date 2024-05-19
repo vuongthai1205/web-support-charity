@@ -26,10 +26,15 @@ import appFirebase from 'config/firebase';
 import { ACCESS_COMMENT } from 'utils/constant';
 import ListComment from './ListComment';
 import { toast } from 'react-toastify';
+import { EditorState, convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import { Editor } from 'react-draft-wysiwyg';
+import { useWebSocketContext } from 'contexts/useWebSocketContext';
 
 const ListJoinProject = lazy(() => import('./ListJoinProject'));
 
 function DetailProject() {
+    const { sendMessage, lastMessage, readyState } = useWebSocketContext();
     const [loading, setLoading] = useState(false);
     const { projectId } = useParams();
     const [project, setProject] = useState({
@@ -60,6 +65,7 @@ function DetailProject() {
     const [listCommentPrivate, setListCommentPrivate] = useState([]);
     const [activeTab, setActiveTab] = useState(ACCESS_COMMENT.PUBLIC);
     const [messageError, setMessageError] = useState('');
+    const [editorState, setEditorState] = useState(EditorState.createEmpty());
     // Function to handle tab change
     const handleTabChange = async (tab) => {
         setActiveTab(tab);
@@ -71,7 +77,7 @@ function DetailProject() {
                 return;
             }
             try {
-                const response = await authApi.get(`${endpoints.commentProjectPrivate}${projectId}/`);
+                const response = await authApi().get(`${endpoints.commentProjectPrivate}${projectId}/`);
 
                 if (response.status === 200) {
                     setListCommentPrivate(response.data);
@@ -156,17 +162,33 @@ function DetailProject() {
             navigate('/login');
         }
         try {
+            
             if (activeTab === ACCESS_COMMENT.PUBLIC) {
-                const response = await authApi.post(`${endpoints['commentProject']}${project.id}/`, formComment);
+                const response = await authApi().post(`${endpoints['commentProject']}${project.id}/`, formComment);
                 if (response.status === 201) {
                     setFormComment({ content: '' });
+                    sendMessage(
+                        JSON.stringify({
+                            to: project?.user.username,
+                            content: `${user.username} vừa bình luận dự án ${project.nameProject} của bạn`,
+                        })
+                    );
                     handleProjectUpdate();
                 } else {
                     console.log('lỗi rồi ');
                 }
             } else {
-                const response = await authApi.post(`${endpoints['commentProjectPrivate']}${project.id}/`, formComment);
+                const response = await authApi().post(
+                    `${endpoints['commentProjectPrivate']}${project.id}/`,
+                    formComment
+                );
                 if (response.status === 201) {
+                    sendMessage(
+                        JSON.stringify({
+                            to: project?.user.username,
+                            content: `${user.username} vừa bình luận dự án ${project.nameProject} của bạn`,
+                        })
+                    );
                     setFormComment({ content: '' });
                     handleProjectUpdate();
                 } else {
@@ -227,6 +249,14 @@ function DetailProject() {
                 );
             }
         }
+    };
+
+    const onEditorStateChange = (editorState) => {
+        setEditorState(editorState);
+        setFormComment((prevFormData) => ({
+            ...prevFormData,
+            content: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+        }));
     };
 
     return (
@@ -294,7 +324,7 @@ function DetailProject() {
                             Đăng ký tham gia
                         </Button>
                         <RegisterProject
-                            project={project.id}
+                            project={project}
                             showPopup={showRegisterProject}
                             closePopup={handleCloseRegisterProject}
                         />
@@ -333,16 +363,16 @@ function DetailProject() {
                     Hãy gửi bình luận của bạn về dự án này
                 </h3>
                 <form onSubmit={handleSubmitComment}>
-                    <Form.Control
-                        required
-                        type="text"
-                        name="content"
-                        placeholder="Nhập bình luận..."
-                        value={formComment.content}
-                        onChange={handleContentChange}
+                    <Editor
+                        editorState={editorState}
+                        toolbarClassName="toolbarClassName"
+                        wrapperClassName="wrapperClassName"
+                        editorClassName="editorClassName"
+                        onEditorStateChange={onEditorStateChange}
+                        placeholder="Nhập nội dung..."
                     />
                     <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Hình ảnh</Form.Label>
+                        <Form.Label>Chèn thêm hình ảnh (nếu cần)</Form.Label>
                         <Form.Control onChange={handleImageChange} type="file" multiple="multiple" />
                         {formComment.images?.length > 0 ? <ImagePost listImage={formComment.images} /> : <></>}
                     </Form.Group>

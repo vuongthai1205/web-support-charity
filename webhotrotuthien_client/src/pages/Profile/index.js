@@ -27,7 +27,7 @@ function Profile() {
     useEffect(() => {
         if (idUser !== null && idUser !== '') {
             const handleGetUser = async () => {
-                const response = await authApi.get(`${endpoints['user']}${idUser}/`);
+                const response = await authApi().get(`${endpoints['user']}${idUser}/`);
                 setU(response.data);
             };
             handleGetUser();
@@ -65,7 +65,7 @@ function Profile() {
                             Báo cáo
                         </button>
                         <Suspense>
-                            <Report id={u.id} showPopup={showReport} closePopup={handleClose} />
+                            <Report id={u.id} showPopup={showReport} closePopup={handleCloseReport} />
                         </Suspense>
                     </div>
                 ) : (
@@ -93,7 +93,7 @@ function Profile() {
                     </>
                 )}
 
-                <div>
+                <div className='mt-2'>
                     {u ? (
                         <>
                             <img height={200} src={u.avatar} alt="User Avatar" />

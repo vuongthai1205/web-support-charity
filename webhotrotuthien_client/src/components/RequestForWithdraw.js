@@ -20,12 +20,15 @@ function RequestFormWithdraw({ id, showPopup, closePopup }) {
     const handleSubmit = async () => {
         if (requestFormWithdraw.moneyMount > 0) {
             try {
-                const response = await authApi.post(endpoints['request-form'], requestFormWithdraw);
+                const response = await authApi().post(endpoints['request-form'], requestFormWithdraw);
                 if (response.status === 201) {
                     alert('Gửi phiếu yêu cầu rút tiền thành công, vui lòng đợi phản hồi từ admin');
                     closePopup();
-                } else {
-                    alert('Thất bại');
+                } else if(response.status === 204) {
+                    alert('Số tiền hiện tại không thể rút');
+                }
+                else{
+                    alert("Thất bại")
                 }
             } catch (ex) {
                 console.log(ex);

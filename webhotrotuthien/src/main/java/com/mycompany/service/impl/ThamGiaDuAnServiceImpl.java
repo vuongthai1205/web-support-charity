@@ -20,20 +20,23 @@ import java.util.List;
  * @author vuongthai1205
  */
 @Service
-public class ThamGiaDuAnServiceImpl implements ThamGiaDuAnService{
+public class ThamGiaDuAnServiceImpl implements ThamGiaDuAnService {
+
     @Autowired
     private ThamGiaDuAnRepository thamGiaDuAnRepository;
-    
+
     @Autowired
     private ThanhVienRepository thanhVienRepository;
 
     @Override
     public boolean addUserToProject(ThamGiaDuAn thamGiaDuAn) {
-        if(thamGiaDuAn.getSoTienDongGop() != null){
+        if (thamGiaDuAn.getSoTienDongGop() != null) {
             ThanhVien t = thanhVienRepository.getUserById(thamGiaDuAn.getThanhVien().getMaThanhVien());
-            
-            t.setTongTien(t.getTongTien() - thamGiaDuAn.getSoTienDongGop());
-            thanhVienRepository.addOrUpdateUser(t);
+            if (t.getTongTien() != null) {
+                t.setTongTien(t.getTongTien() - thamGiaDuAn.getSoTienDongGop());
+                thanhVienRepository.addOrUpdateUser(t);
+            }
+
         }
         return this.thamGiaDuAnRepository.addUserToProject(thamGiaDuAn);
     }
@@ -55,13 +58,15 @@ public class ThamGiaDuAnServiceImpl implements ThamGiaDuAnService{
 
     @Override
     public boolean deleteJoinProject(ThamGiaDuAn thamGiaDuAn) {
-        if(thamGiaDuAn.getSoTienDongGop() != null){
+        if (thamGiaDuAn.getSoTienDongGop() != null) {
             ThanhVien t = thanhVienRepository.getUserById(thamGiaDuAn.getThanhVien().getMaThanhVien());
-            
-            t.setTongTien(t.getTongTien() + thamGiaDuAn.getSoTienDongGop());
-            thanhVienRepository.addOrUpdateUser(t);
+            if (t.getTongTien() != null) {
+                t.setTongTien(t.getTongTien() + thamGiaDuAn.getSoTienDongGop());
+                thanhVienRepository.addOrUpdateUser(t);
+            }
+
         }
         return this.thamGiaDuAnRepository.deleteJoinProject(thamGiaDuAn);
     }
-    
+
 }

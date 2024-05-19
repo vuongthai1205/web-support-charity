@@ -90,7 +90,7 @@ public class BaiVietServiceImpl implements BaiVietService {
     @Override
     public boolean deletePost(int id) {
         BaiViet post = this.baiVietRepository.getPostById(id);
-        List<TvThichBv> thichBvs = this.thichRepository.getLikePosts(post);
+        List<TvThichBv> thichBvs = this.thichRepository.getLikePostsByPost(post);
         thichBvs.forEach(t -> {
             this.thichRepository.deleteLikePost(t);
         });

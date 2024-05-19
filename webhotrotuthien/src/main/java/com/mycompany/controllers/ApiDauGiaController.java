@@ -78,8 +78,7 @@ public class ApiDauGiaController {
             auction.setGiaTien(auctionRequestDTO.getPrice());
 
             if (this.auctionService.addAuction(auction)) {
-                u.setTongTien(u.getTongTien() - auctionRequestDTO.getPrice());
-                userService.addOrUpdateUser(u);
+
                 redisService.flushAll();
                 return new ResponseEntity<>("Thành Công", HttpStatus.CREATED);
             } else {
@@ -105,6 +104,12 @@ public class ApiDauGiaController {
                 for (DauGia a : auctions) {
 
                     if (!a.isWinnerAuction()) {
+                        if (a.getGiaTien() != null) {
+                            ThanhVien t = this.userService.getUserById(auction.getThanhVien().getMaThanhVien());
+
+                            t.setTongTien(t.getTongTien() + a.getGiaTien());
+                            this.userService.updateUser(t);
+                        }
                         this.emailService.sendSimpleMessage(a.getThanhVien().getEmail(), "Charity Auction Result Notification", "Hello " + a.getThanhVien().getTen()
                                 + "\n\nWe are pleased to inform you about the results of the charity auction on our social network."
                                 + "\nPost: " + a.getBaiViet().getTieuDe()
@@ -121,7 +126,7 @@ public class ApiDauGiaController {
                     }
 
                 }
-
+                redisService.flushAll();
                 return new ResponseEntity<>("Thành Công", HttpStatus.CREATED);
             } else {
                 return new ResponseEntity<>("Không thành công ", HttpStatus.INTERNAL_SERVER_ERROR);

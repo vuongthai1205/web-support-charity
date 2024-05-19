@@ -10,7 +10,7 @@ function DeleteProject({ project, showPopup, closePopup }) {
     console.log(id)
     try{
 
-      const response = await authApi.delete(`${endpoints["project"]}${id}/`)
+      const response = await authApi().delete(`${endpoints["project"]}${id}/`)
       if(response.status === 200){
         navigate("/project-charity");
         closePopup()

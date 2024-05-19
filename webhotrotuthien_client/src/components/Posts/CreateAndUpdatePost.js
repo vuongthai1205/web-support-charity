@@ -136,7 +136,7 @@ function CreateAndUpdatePost({
 
     if (post !== undefined) {
       try {
-        const response = await authApi.put(
+        const response = await authApi().put(
           `${endpoints["posts"]}${post.id}/`,
           formData
         );
@@ -160,7 +160,7 @@ function CreateAndUpdatePost({
       }
     } else {
       try {
-        const response = await authApi.post(endpoints["posts"], formData);
+        const response = await authApi().post(endpoints["posts"], formData);
 
         if (response.status === 201) {
           onPostCreated();

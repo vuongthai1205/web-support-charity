@@ -39,11 +39,13 @@ public class DauGiaServiceImpl implements DauGiaService {
     @Override
     public boolean addAuction(DauGia auction) {
         auction.setIsWinnerAuction(false);
-        if(auction.getGiaTien()!= null){
+        if (auction.getGiaTien() != null) {
             ThanhVien t = thanhVienRepository.getUserById(auction.getThanhVien().getMaThanhVien());
-            
-            t.setTongTien(t.getTongTien() - auction.getGiaTien());
-            thanhVienRepository.addOrUpdateUser(t);
+            if (t.getTongTien() != null) {
+                t.setTongTien(t.getTongTien() - auction.getGiaTien());
+                thanhVienRepository.addOrUpdateUser(t);
+            }
+
         }
         return this.dauGiaRepository.addAuction(auction);
     }

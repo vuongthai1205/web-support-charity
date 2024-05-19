@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface ThanhVienService extends UserDetailsService {
     List<ThanhVien> getUsers(String name);
     boolean addOrUpdateUser(ThanhVien user);
+    void updateUser(ThanhVien user);
     List<ThanhVien> getListUser(Map<String, String> params);
     ThanhVien getUserById(int id );
     boolean deleteUser(int id);
