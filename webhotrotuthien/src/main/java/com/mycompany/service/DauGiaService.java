@@ -19,6 +19,7 @@ public interface DauGiaService {
     boolean updateAuction(DauGia auction);
     boolean checkAuctionExist(ThanhVien user, BaiViet post);
     List<DauGia> getListAuction(BaiViet post);
+    List<DauGia> getListAuctionByUser(ThanhVien user);
     DauGia getAuctionById(int thanhVienId, int  baiVietId);
     boolean updateListAuction(List<DauGia> auctions);
 }

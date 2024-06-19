@@ -30,6 +30,8 @@
     <class>com.mycompany.pojo.HinhAnhDuAn</class>
     <class>com.mycompany.pojo.HinhAnhBinhLuanDa</class>
     <class>com.mycompany.pojo.PhieuYeuCau</class>
+    <class>com.mycompany.pojo.LichSuGiaoDich</class>
+    <class>com.mycompany.pojo.LichSuGiaoDichDa</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/charitydb?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

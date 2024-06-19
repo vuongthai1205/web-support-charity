@@ -106,7 +106,7 @@ function Header() {
                             roundedCircle
                             src={user.anhDaiDien}
                           />
-                          Xin chào {user.username} - {user?.tongTien === null ? formatCurrency(0) : formatCurrency(user.tongTien)}
+                          Xin chào {user.username}
                         </NavLink>
                       </li>
                       <li className="item-menu-header ml-[13px] flex items-center ">

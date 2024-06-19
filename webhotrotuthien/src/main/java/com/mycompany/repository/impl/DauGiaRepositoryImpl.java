@@ -123,4 +123,19 @@ public class DauGiaRepositoryImpl implements DauGiaRepository {
         }
     }
 
+    @Override
+    public List<DauGia> getListAuctionByUser(ThanhVien thanhVien) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<DauGia> criteriaQuery = criteriaBuilder.createQuery(DauGia.class);
+
+        Root<DauGia> root = criteriaQuery.from(DauGia.class);
+
+        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("thanhVien"), thanhVien));
+        Query q = session.createQuery(criteriaQuery);
+
+        return q.getResultList();
+    }
+
 }

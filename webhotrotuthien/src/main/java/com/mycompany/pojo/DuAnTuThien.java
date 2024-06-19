@@ -42,6 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NamedQueries({
     @NamedQuery(name = "DuAnTuThien.findAll", query = "SELECT d FROM DuAnTuThien d")})
 public class DuAnTuThien implements Serializable {
+
     @PrePersist
     protected void onCreate() {
         this.ngayTao = new Date(System.currentTimeMillis());
@@ -277,4 +278,5 @@ public class DuAnTuThien implements Serializable {
     public void setTvBinhLuanDaSet(Set<TvBinhLuanDa> tvBinhLuanDaSet) {
         this.tvBinhLuanDaSet = tvBinhLuanDaSet;
     }
+
 }

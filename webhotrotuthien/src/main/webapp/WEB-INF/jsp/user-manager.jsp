@@ -46,7 +46,7 @@
                             <td><img width="200" alt="${user.tenDangNhap}" src="<c:out value="${user.anhDaiDien}"/>"/>  </td>
                             <td>
                                 <c:choose>
-                                    
+
                                     <c:when test="${user.gioiTinh == null}">
                                         None
                                     </c:when>
@@ -78,4 +78,4 @@
         </div>
     </div>
 </div>
-    <script src="<c:url value="/js/main.js" />"></script>
+<script src="<c:url value="/js/main.js" />"></script>

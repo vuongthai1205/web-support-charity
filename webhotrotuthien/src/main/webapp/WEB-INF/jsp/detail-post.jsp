@@ -62,3 +62,31 @@
 <a href="<c:url value="/delete-post/${post.maBaiViet}"/>">
             Delete Post
         </a>
+            <h6 class="m-0 font-weight-bold text-primary">List user auctioned</h6>
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Price</th>
+                        <th>Is Winner</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${auctions}" var="auction">
+                        <tr>
+                            <td><c:out value="${auction.username}"/></td>
+                            <td><c:out value="${auction.price}"/></td>
+                            <td><c:choose>
+
+                                    <c:when test="${auction.winnerAuctioned == true}">
+                                        Winner
+                                    </c:when>
+                                    <c:otherwise>
+                                        Not win
+                                    </c:otherwise>
+                                </c:choose></td>
+                        </tr>
+                    </c:forEach>
+
+                </tbody>
+            </table>

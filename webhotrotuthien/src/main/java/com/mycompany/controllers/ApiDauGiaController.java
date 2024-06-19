@@ -61,9 +61,6 @@ public class ApiDauGiaController {
     public ResponseEntity<String> addAuction(Principal user, @RequestBody AuctionRequestDTO auctionRequestDTO) {
         ThanhVien u = this.userService.getUserByUsername(user.getName());
         BaiViet post = this.postService.getPostById(auctionRequestDTO.getIdPost());
-        if (auctionRequestDTO.getPrice() > u.getTongTien()) {
-            return new ResponseEntity<>("not oke", HttpStatus.CONFLICT);
-        }
         if (this.auctionService.checkAuctionExist(u, post)) {
             return new ResponseEntity<>("Ban da dau gia bai viet", HttpStatus.NO_CONTENT);
         }
@@ -106,8 +103,6 @@ public class ApiDauGiaController {
                     if (!a.isWinnerAuction()) {
                         if (a.getGiaTien() != null) {
                             ThanhVien t = this.userService.getUserById(auction.getThanhVien().getMaThanhVien());
-
-                            t.setTongTien(t.getTongTien() + a.getGiaTien());
                             this.userService.updateUser(t);
                         }
                         this.emailService.sendSimpleMessage(a.getThanhVien().getEmail(), "Charity Auction Result Notification", "Hello " + a.getThanhVien().getTen()
@@ -159,6 +154,27 @@ public class ApiDauGiaController {
         } else {
             return new ResponseEntity<>("Ban khong phai chu so huu bai viet", HttpStatus.BAD_REQUEST);
         }
+
+    }
+
+    @GetMapping("/auction-by-user-id/")
+    public ResponseEntity<?> getAuctionsByUserid(Principal user) {
+        ThanhVien u = this.userService.getUserByUsername(user.getName());
+        List<DauGia> auctions = this.auctionService.getListAuctionByUser(u);
+        List<AuctionResponseDTO> auctionResponseDTOs = new ArrayList<>();
+        auctions.forEach(a -> {
+            AuctionResponseDTO auctionResponseDTO = new AuctionResponseDTO();
+            auctionResponseDTO.setUsername(a.getThanhVien().getTenDangNhap());
+            auctionResponseDTO.setAvatar(a.getThanhVien().getAnhDaiDien());
+            auctionResponseDTO.setPrice(a.getGiaTien());
+            auctionResponseDTO.setWinnerAuctioned((a.getDaThangDauGia() == 1));
+            auctionResponseDTO.setIdPost(a.getBaiViet().getMaBaiViet());
+            auctionResponseDTO.setIdUser(a.getThanhVien().getMaThanhVien());
+            auctionResponseDTO.setTitle(a.getBaiViet().getTieuDe());
+            auctionResponseDTOs.add(auctionResponseDTO);
+        });
+
+        return new ResponseEntity<>(auctionResponseDTOs, HttpStatus.OK);
 
     }
 }

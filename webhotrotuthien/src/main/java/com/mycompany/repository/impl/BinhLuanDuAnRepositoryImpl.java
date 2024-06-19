@@ -130,4 +130,21 @@ public class BinhLuanDuAnRepositoryImpl implements BinhLuanDuAnRepository {
         Query<TvBinhLuanDa> query = session.createQuery(criteriaQuery);
         return query.getResultList();
     }
+
+    @Override
+    public List<TvBinhLuanDa> listAllCommentPost(DuAnTuThien duAnTuThien) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<TvBinhLuanDa> criteriaQuery = criteriaBuilder.createQuery(TvBinhLuanDa.class);
+
+        Root<TvBinhLuanDa> root = criteriaQuery.from(TvBinhLuanDa.class);
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(
+                criteriaBuilder.equal(root.get("duAnTuThien"), duAnTuThien));
+        criteriaQuery.select(root)
+                .where(predicates.toArray(new Predicate[]{}));
+        criteriaQuery.orderBy(criteriaBuilder.desc(root.get("ngayTao")));
+        Query<TvBinhLuanDa> query = session.createQuery(criteriaQuery);
+        return query.getResultList();
+    }
 }

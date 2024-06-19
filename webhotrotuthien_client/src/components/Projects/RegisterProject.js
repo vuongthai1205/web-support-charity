@@ -21,7 +21,10 @@ function RegisterProject({ project, showPopup, closePopup }) {
     const [user, dispatch] = useContext(MyUserContext);
     const handleRegister = async (e) => {
         e.preventDefault();
-
+        if(formData.contributionOther === ''){
+            alert("Vui lòng nhập các đóng góp khác")
+            return;
+        }
         if (!user) {
             // Người dùng chưa xác thực, chuyển hướng đến trang đăng nhập
             navigate('/login');

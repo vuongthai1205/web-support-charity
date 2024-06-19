@@ -55,14 +55,13 @@ public class ApiThamGiaDuAnController {
     private VaiTroThamGiaDuAnService vaiTroThamGiaDuAnService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private RedisService redisService;
 
     @PostMapping("/join-project/")
     public ResponseEntity<String> addJoinProject(Principal user, @RequestBody JoinProjectRequestDTO joinProjectRequestDTO) {
         ThanhVien u = this.thanhVienService.getUserByUsername(user.getName());
         DuAnTuThien duAnTuThien = this.duAnTuThienService.getDuAnTuThienById(joinProjectRequestDTO.getIdProject());
-        if ( u.getTongTien() != null && joinProjectRequestDTO.getContributionAmount() > u.getTongTien()) {
-            return new ResponseEntity<>("not oke", HttpStatus.CONFLICT);
-        }
         ThamGiaDuAn thamGiaDuAn = new ThamGiaDuAn();
 
         thamGiaDuAn.setDuAnTuThien(duAnTuThien);
@@ -75,6 +74,7 @@ public class ApiThamGiaDuAnController {
         thamGiaDuAn.setMaVaiTroThamGiaDA(vaiTroThamGiaDa);
         thamGiaDuAn.setThamGiaDuAnPK(duAnPK);
         if (this.thamGiaDuAnService.addUserToProject(thamGiaDuAn)) {
+            redisService.flushAll();
             this.emailService.sendSimpleMessage(thamGiaDuAn.getThanhVien().getEmail(), "Thank you for join project",
                     "Thank "
                     + thamGiaDuAn.getThanhVien().getTen()
@@ -106,6 +106,7 @@ public class ApiThamGiaDuAnController {
             thamGiaDuAn.setCacDongGopKhac(joinProjectRequestDTO.getContributionOther());
             thamGiaDuAn.setSoTienDongGop(joinProjectRequestDTO.getContributionAmount());
             if (this.thamGiaDuAnService.updateJoinProject(thamGiaDuAn)) {
+                redisService.flushAll();
                 return new ResponseEntity<>("oke", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("not oke", HttpStatus.BAD_REQUEST);
@@ -124,12 +125,14 @@ public class ApiThamGiaDuAnController {
         ThamGiaDuAn thamGiaDuAn = this.thamGiaDuAnService.getThamGiaDuAn(thanhVien, duAnTuThien);
         if (duAnTuThien.getMaThanhVienTaoDA().equals(u)) {
             if (this.thamGiaDuAnService.deleteJoinProject(thamGiaDuAn)) {
+                redisService.flushAll();
                 return new ResponseEntity<>("oke", HttpStatus.NO_CONTENT);
             } else {
                 return new ResponseEntity<>("not oke", HttpStatus.BAD_REQUEST);
             }
         } else if (thamGiaDuAn.getThanhVien().equals(u)) {
             if (this.thamGiaDuAnService.deleteJoinProject(thamGiaDuAn)) {
+                redisService.flushAll();
                 return new ResponseEntity<>("oke", HttpStatus.NO_CONTENT);
             } else {
                 return new ResponseEntity<>("not oke", HttpStatus.BAD_REQUEST);

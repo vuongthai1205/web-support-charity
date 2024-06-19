@@ -22,6 +22,8 @@ public interface BinhLuanDuAnRepository {
     TvBinhLuanDa getCommentPost(ThanhVien user, DuAnTuThien duAnTuThien);
 
     List<TvBinhLuanDa> listCommentPost(DuAnTuThien duAnTuThien);
+    List<TvBinhLuanDa> listAllCommentPost(DuAnTuThien duAnTuThien);
+
     List<TvBinhLuanDa> listCommentProjectPrivate(DuAnTuThien duAnTuThien);
     
     TvBinhLuanDa getCommentById(int id);

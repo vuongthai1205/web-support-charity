@@ -30,14 +30,6 @@ public class ThamGiaDuAnServiceImpl implements ThamGiaDuAnService {
 
     @Override
     public boolean addUserToProject(ThamGiaDuAn thamGiaDuAn) {
-        if (thamGiaDuAn.getSoTienDongGop() != null) {
-            ThanhVien t = thanhVienRepository.getUserById(thamGiaDuAn.getThanhVien().getMaThanhVien());
-            if (t.getTongTien() != null) {
-                t.setTongTien(t.getTongTien() - thamGiaDuAn.getSoTienDongGop());
-                thanhVienRepository.addOrUpdateUser(t);
-            }
-
-        }
         return this.thamGiaDuAnRepository.addUserToProject(thamGiaDuAn);
     }
 
@@ -58,14 +50,6 @@ public class ThamGiaDuAnServiceImpl implements ThamGiaDuAnService {
 
     @Override
     public boolean deleteJoinProject(ThamGiaDuAn thamGiaDuAn) {
-        if (thamGiaDuAn.getSoTienDongGop() != null) {
-            ThanhVien t = thanhVienRepository.getUserById(thamGiaDuAn.getThanhVien().getMaThanhVien());
-            if (t.getTongTien() != null) {
-                t.setTongTien(t.getTongTien() + thamGiaDuAn.getSoTienDongGop());
-                thanhVienRepository.addOrUpdateUser(t);
-            }
-
-        }
         return this.thamGiaDuAnRepository.deleteJoinProject(thamGiaDuAn);
     }
 

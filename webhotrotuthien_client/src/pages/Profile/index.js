@@ -8,8 +8,6 @@ import { useSearchParams } from 'react-router-dom';
 import { authApi, endpoints } from '../../config/apiConfig';
 import Report from '../../components/Report';
 import { Suspense } from 'react';
-import RequestForm from 'components/RequestForm';
-import RequestFormWithdraw from 'components/RequestForWithdraw';
 
 function Profile() {
     const [count, setCount] = useState(0);
@@ -70,7 +68,7 @@ function Profile() {
                     </div>
                 ) : (
                     <>
-                        <button
+                        {/* <button
                             className="bg-color-btn-info text-white p-[8px] rounded-[12px]"
                             onClick={handleShowDepositForm}>
                             Nạp tiền
@@ -89,7 +87,7 @@ function Profile() {
                             <Suspense>
                                 <RequestFormWithdraw id={u.id} showPopup={showWithdrawForm} closePopup={handleClose} />
                             </Suspense>
-                        )}
+                        )} */}
                     </>
                 )}
 

@@ -21,6 +21,7 @@ public class AuctionResponseDTO {
 
     private int id;
     private String username;
+    private String title;
     private String avatar;
     private double price;
     private boolean isWinnerAuctioned;

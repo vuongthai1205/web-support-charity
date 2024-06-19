@@ -19,7 +19,6 @@ export const endpoints = {
     project: `${SERVER_CONTEXT}/api/charity-project/`,
     joinProject: `${SERVER_CONTEXT}/api/join-project/`,
     report: `${SERVER_CONTEXT}/api/report/`,
-    'request-form': `${SERVER_CONTEXT}/api/requestForm/`,
 };
 
 export const authApi = () => {

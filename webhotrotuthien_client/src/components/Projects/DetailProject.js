@@ -158,6 +158,9 @@ function DetailProject() {
     }, [count]);
     const handleSubmitComment = async (e) => {
         e.preventDefault();
+        if(formComment.content === ''){
+            return;
+        }
         if (!user) {
             navigate('/login');
         }

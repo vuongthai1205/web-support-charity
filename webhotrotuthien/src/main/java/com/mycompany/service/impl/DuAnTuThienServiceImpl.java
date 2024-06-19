@@ -8,6 +8,8 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.mycompany.pojo.DuAnTuThien;
 import com.mycompany.pojo.HinhAnhDuAn;
+import com.mycompany.pojo.TvBinhLuanDa;
+import com.mycompany.repository.BinhLuanDuAnRepository;
 import com.mycompany.repository.DuAnTuThienRepository;
 import com.mycompany.repository.HinhAnhDuAnRepository;
 import com.mycompany.service.DuAnTuThienService;
@@ -33,6 +35,9 @@ public class DuAnTuThienServiceImpl implements DuAnTuThienService {
     private Cloudinary cloudinary;
     @Autowired
     private HinhAnhDuAnRepository hinhAnhDuAnRepository;
+    
+    @Autowired
+    private BinhLuanDuAnRepository tvBinhLuanDaRepository;
 
     @Override
     public boolean addOrUpdateCharityProject(DuAnTuThien duAnTuThien) {
@@ -79,6 +84,10 @@ public class DuAnTuThienServiceImpl implements DuAnTuThienService {
 
     @Override
     public boolean deleteProject(DuAnTuThien duAnTuThien) {
+        List<TvBinhLuanDa> binhLuanDas = this.tvBinhLuanDaRepository.listAllCommentPost(duAnTuThien);
+        binhLuanDas.forEach(t -> {
+            this.tvBinhLuanDaRepository.deleteComment(t);
+        });
         return this.duAnTuThienRepository.deleteProject(duAnTuThien);
     }
 

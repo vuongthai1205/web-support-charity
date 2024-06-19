@@ -56,20 +56,10 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="content"
                        value="/WEB-INF/jsp/report.jsp" />
     </definition>
-    <definition name="request-form" extends="baseLayout">
-        <put-attribute name="title" value="Manager Request Form" />
-        <put-attribute name="content"
-                       value="/WEB-INF/jsp/request-form.jsp" />
-    </definition>
     <definition name="detail-post" extends="baseLayout">
         <put-attribute name="title" value="Chi tiet bai viet" />
         <put-attribute name="content"
                        value="/WEB-INF/jsp/detail-post.jsp" />
-    </definition>
-    <definition name="detail-request-form" extends="baseLayout">
-        <put-attribute name="title" value="Chi tiet phieu yeu cau" />
-        <put-attribute name="content"
-                       value="/WEB-INF/jsp/detail-request-form.jsp" />
     </definition>
     <definition name="detail-charityproject" extends="baseLayout">
         <put-attribute name="title" value="Detail Charity Project" />

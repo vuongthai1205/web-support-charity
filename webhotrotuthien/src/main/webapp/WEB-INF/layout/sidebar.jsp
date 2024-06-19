@@ -54,13 +54,6 @@
             <i class="fas fa-fw fa-table"></i>
             <span>Manager Report</span></a>
     </li>
-    
-    <li class="nav-item">
-        <a class="nav-link" href="<c:url value="/request-form/"/>">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Manager Request Form</span></a>
-    </li>
-
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

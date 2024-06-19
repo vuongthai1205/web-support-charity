@@ -4,9 +4,14 @@
  */
 package com.mycompany.controllers;
 
+import com.mycompany.DTO.AuctionResponseDTO;
 import com.mycompany.pojo.BaiViet;
+import com.mycompany.pojo.DauGia;
 import com.mycompany.service.BaiVietService;
+import com.mycompany.service.DauGiaService;
 import com.mycompany.service.TrangThaiDauGiaService;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class BaiVietController {
     @Autowired
     private BaiVietService baiVietService;
+    @Autowired
+    private DauGiaService auctionService;
     
     @Autowired
     private TrangThaiDauGiaService trangThaiDauGiaService;
@@ -48,7 +55,21 @@ public class BaiVietController {
     
     @GetMapping("/detail-post/{id}")
     public String detailPost(Model model, @PathVariable(value = "id") int id){
-        model.addAttribute("post", this.baiVietService.getPostById(id));
+        BaiViet baiViet = this.baiVietService.getPostById(id);
+         List<DauGia> auctions = this.auctionService.getListAuction(baiViet);
+            List<AuctionResponseDTO> auctionResponseDTOs = new ArrayList<>();
+            auctions.forEach(a -> {
+                AuctionResponseDTO auctionResponseDTO = new AuctionResponseDTO();
+                auctionResponseDTO.setUsername(a.getThanhVien().getTenDangNhap());
+                auctionResponseDTO.setAvatar(a.getThanhVien().getAnhDaiDien());
+                auctionResponseDTO.setPrice(a.getGiaTien());
+                auctionResponseDTO.setWinnerAuctioned((a.getDaThangDauGia() == 1));
+                auctionResponseDTO.setIdPost(a.getBaiViet().getMaBaiViet());
+                auctionResponseDTO.setIdUser(a.getThanhVien().getMaThanhVien());
+                auctionResponseDTOs.add(auctionResponseDTO);
+            });
+        model.addAttribute("post", baiViet);
+        model.addAttribute("auctions", auctionResponseDTOs);
         return "detail-post";
     }
     @GetMapping("/delete-post/{id}")

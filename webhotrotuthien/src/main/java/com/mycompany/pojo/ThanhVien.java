@@ -115,8 +115,6 @@ public class ThanhVien implements UserDetails {
     @Column(name = "AnhDaiDien")
     @JMap("avatar")
     private String anhDaiDien;
-    @Column(name = "TongTien")
-    private Double tongTien;
     @Column(name = "NgayTao")
     @Temporal(TemporalType.TIMESTAMP)
     @JMap("createAt")
@@ -145,7 +143,7 @@ public class ThanhVien implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "thanhVien")
     @JsonIgnore
     private Set<TvThichBv> tvThichBvSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "maThanhVien")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "maThanhVien")
     @JsonIgnore
     private Set<BaiViet> baiVietSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maThanhVienTaoDA")
@@ -157,9 +155,6 @@ public class ThanhVien implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "thanhVien1")
     @JsonIgnore
     private Set<BaoCaoThanhVien> baoCaoThanhVienSet1;
-    @JsonIgnore
-    @OneToMany(mappedBy = "maThanhVien")
-    private Collection<PhieuYeuCau> phieuYeuCauCollection;
     
     @Transient
     @JsonIgnore
@@ -529,27 +524,5 @@ public class ThanhVien implements UserDetails {
     }
 
 
-    @XmlTransient
-    public Collection<PhieuYeuCau> getPhieuYeuCauCollection() {
-        return phieuYeuCauCollection;
-    }
-
-    public void setPhieuYeuCauCollection(Collection<PhieuYeuCau> phieuYeuCauCollection) {
-        this.phieuYeuCauCollection = phieuYeuCauCollection;
-    }
-
-    /**
-     * @return the tongTien
-     */
-    public Double getTongTien() {
-        return tongTien;
-    }
-
-    /**
-     * @param tongTien the tongTien to set
-     */
-    public void setTongTien(Double tongTien) {
-        this.tongTien = tongTien;
-    }
 
 }
