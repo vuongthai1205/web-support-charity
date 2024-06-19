@@ -1,9 +1,11 @@
 # webhotrotuthien
 git clone https://github.com/vuongthai1205/webhotrotuthien
-Các bước run server redis
 
+Các bước run server redis
 1. Tải docker
 2. Truy cập vào sourcecode và nhập command line là “docker compose up”
+
+
 Các bước nhập database
 1. Cài đặt mysql server
 2. mở mysql workbench
@@ -20,5 +22,5 @@ Các bước sử dụng
 Các bước sử dụng và chạy client
 
 1. Cài đặt node phiên bản 16.14.2
-1. Mở thư mục webhotrotuthien_client trong vs code hoặc bất kỳ ide nào 
-1. Chạy câu lệnh npm i sau đó chay câu lệnh npm start. Lưu ý phải chạy server trước mới chạy client.
+2. Mở thư mục webhotrotuthien_client trong vs code hoặc bất kỳ ide nào 
+3. Chạy câu lệnh npm i sau đó chay câu lệnh npm start. Lưu ý phải chạy server trước mới chạy client.
