@@ -12,7 +12,7 @@ Các bước nhập database
 3. tạo schema mới | tạo mới 1 database và đặt tên webhotrotuthien
 4. chọn server -> data import và import file database.sql
 
-Các bước sử dụng
+Các bước sử dụng và chạy server
 1. tải netbean 13 trở lên và jdk 14 trở lên và tomcat server 9
 2. mở project trong netbean
 3. sau đó chỉnh sửa username và password của mysqlserver trong file database.properties
