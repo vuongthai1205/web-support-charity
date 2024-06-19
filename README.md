@@ -1,5 +1,5 @@
 # webhotrotuthien
-git clone https://github.com/vuongthai1205/webhotrotuthien
+git clone https://github.com/vuongthai1205/web-support-charity.git
 
 Các bước run server redis
 1. Tải docker
